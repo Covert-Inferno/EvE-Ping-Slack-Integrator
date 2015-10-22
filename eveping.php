@@ -43,7 +43,7 @@ if ($_REQUEST['token'] == $epcmd_slack_token) {
     file_get_contents($url, false, $context);
     $message = str_replace('+',' ',$message);
     echo "EvE Ping \n$user: $message";
-} elseif ($_REQUEST['token'] == $epwh_slack_token {
+} elseif ($_REQUEST['token'] == $epwh_slack_token) {
     if ($_REQUEST['text'] == "EvE Ping Sent") {
         die();
     }
