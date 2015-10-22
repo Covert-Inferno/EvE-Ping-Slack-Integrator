@@ -1,5 +1,6 @@
 
 # EvE Ping Slack Integrator beta
+**(ESPI 0.1b)**
 *Creative Commons - free to share, edit and distribute.*
 
 You can configure either Slash Command or Outgoing Webhook, or both.
