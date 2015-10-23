@@ -1,67 +1,75 @@
 <?php 
 /* 
-Slack EvE Ping Integration beta
+ESPI 0.2b
 Creative Commons - free to share, edit and distribute.
-READ readme.md for install instructions: 
-https://github.com/OrangeAideron/EvE-Ping-Slack-Integrator/blob/master/README.md
-John Grant - johnagrant@outlook.com
+https://github.com/OrangeAideron/EvE-Ping-Slack-Integrator
 */
 
 // ------- EvE Ping: Slash Command ------- \\
 
-//Your Eveping KeyID example: 6311939
-$epcmd_eveping_keyid = "";
-//Your Eveping vCode example: 9c3915810698c50f41dff7607aa8d795101e62aea88808a201322f132b874e67
-$epcmd_eveping_vcode = ""; 
-//Your Slack Token example: 9n5yfLPm44e4vM5yvqcuJK5H
-$epcmd_slack_token = "";
+//Your Slack slash command token, example: 9n5yfLPm44e4vM5yvqcuJK5H
+$evepingCmd_SlackToken = "";
+//Your Eveping KeyID, example: 6311939
+$evepingCmd_KeyId = "";
+//Your Eveping vCode, example: 9c3915810698c50f41dff7607aa8d795101e62aea88808a201322f132b874e67
+$evepingCmd_Vcode = ""; 
     
-// ------- EvE Ping: Outgoing Webhooks ------- \\
+// ------- EvE Ping: Outgoing Webhook ------- \\
 
-//Your Eveping KeyID
-$epwh_eveping_keyid = "";
-//Your Eveping vCode
-$epwh_eveping_keyid = "";
-//Your Slack Token
-$epwh_slack_token = "";
+//Your Slack outgoing webhook token, example: 9n5yfLPm44e4vM5yvqcuJK5H
+$evepingWebHook_SlackToken = "";
+//Your Eveping KeyID, example: 6311939
+$evepingWebHook_KeyId = "";
+//Your Eveping vCode, example: 9c3915810698c50f41dff7607aa8d795101e62aea88808a201322f132b874e67
+$evepingWebHook_Vcode = "";
 
 // ------- END SETTINGS ------- \\
 
 http_response_code(200); 
-
-if ($_REQUEST['token'] == $epcmd_slack_token) {
-    $user = urlencode($_REQUEST['user_name']);
-    $message = urlencode($_REQUEST['text']);
-    $url = "https://www.eveping.com/api/sendmessage?keyid=$epcmd_eveping_keyid&vcode=$epcmd_slack_token&type=corporation&message=$user:+$message";
-    $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
-        ),
-    );
-    $context  = stream_context_create($options);
-    file_get_contents($url, false, $context);
-    $message = str_replace('+',' ',$message);
-    echo "EvE Ping \n$user: $message";
-} elseif ($_REQUEST['token'] == $epwh_slack_token) {
-    if ($_REQUEST['text'] == "EvE Ping Sent") {
-        die();
-    }
-    $user = urlencode($_REQUEST['user_name']);
-    $message = urlencode($_REQUEST['text']);
-    $message = str_replace("<!group>","",$message);
-    $url = "https://www.eveping.com/api/sendmessage?keyid=$epwh_eveping_keyid&vcode=$epwp_slack_token&type=corporation&message=$user:+$message";
-    $options = array(
-        'http' => array(
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method'  => 'POST',
-        ),
-    );
-    $context  = stream_context_create($options);
-    file_get_contents($url, false, $context);
-    $response = array("text" => "EvE Ping Sent");
-    echo json_encode($response);
-} else {
-    echo "ERROR: No Token, contact your Slack administrator.";
+$EvePing = new EvePingSender;
+switch ($_REQUEST['token']) {
+    case $evepingCmd_SlackToken:
+        $EvePing->ping($evepingCmd_KeyId,$evepingCmd_Vcode,true);
+        break;
+    case $evepingWebHook_SlackToken:
+        $EvePing->ping($evepingWebHook_KeyId,$evepingWebHook_Vcode);
+        break;
+    default:
+        echo "No Auth. Contact your Slack Admin.";
 }
+unset($EvePing);
+class EvePingSender {
+    public $slackToken = "";
+    public $slackUser = "";
+    public $slackMessage = "";
+    public $evepingUrl = "https://www.eveping.com/api/sendmessage?";
+    public $evepingOptions = array(
+        'http' => array(
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+        ),
+    );
+    public $evepingContext = "";
+    public $evepingResponse = array();
+    public $ESPIreturn = "EvE Ping Error";
+    public function __construct() {
+        $this->slackToken = urlencode($_REQUEST['token']);
+        $this->slackUser = urlencode($_REQUEST['user_name']);
+        $this->slackMessage = urlencode($_REQUEST['text']);
+    }
+    public function ping($id = "noid",$vcode = "novcode",$debug = false) {
+        if ($this->slackMessage == urlencode("EvE Ping Sent") || $this->slackMessage == urlencode("EvE Ping Error"))
+            die();
+        $this->evepingUrl .= "keyid=$id&vcode=$vcode&type=corporation&message=$this->slackUser:+$this->slackMessage";
+        $this->evepingContext = stream_context_create($this->evepingOptions);
+        $this->evepingResponse[] = json_decode(file_get_contents($this->evepingUrl, false, $this->evepingContext));
+        if (!is_array($this->evepingResponse)) 
+            die("EvE Ping Error");
+        if ($this->evepingResponse['status_txt'] != "ERROR")
+            $this->ESPIreturn = json_encode(array("text" => "EvE Ping Sent"));
+        if ($debug)
+            $this->ESPIreturn = "EvE Ping Sent $this->slackUser: ".str_replace("+", " ", $this->slackMessage);
+        echo $this->ESPIreturn;
+    }
+} //EvePingSender class
 ?>
