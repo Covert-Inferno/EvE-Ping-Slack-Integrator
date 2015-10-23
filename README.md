@@ -13,7 +13,7 @@ To install: download & host the eveping.php file (PHP 5.0 or later, _NOT_ 4). Fo
 
 Quick side note, since I'm dealing with EvE Players. No data is collected, your keyid, vcode, ping messages are sent directly between Slack, EvE Ping, and the server you host the eveping.php file on respectively. I recommend configuring HTTPS (with a valid certificate) for hosting the eveping.php file. The code is open source please take a look and improve it. Let me know what you think.
 
-You're welcome to rename the eveping.php file to anything. I have it as index.php in a folder so that my URL's in slack and nice and clean :)
+You're welcome to rename the eveping.php file to anything. I have it as index.php in a folder so that my URL's in slack are nice and clean :)
 
 07 Fly Dangerous
 
