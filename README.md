@@ -15,7 +15,7 @@ Quick side note, since I'm dealing with EvE Players. No data is collected, your 
 
 You're welcome to rename the eveping.php file to anything. I have it as index.php in a folder so that my URL's in slack are nice and clean :)
 
-07 Fly Dangerous, OJ
+*07 Fly Dangerous, OJ*
 
 ##ESPI: Slack Command
 
@@ -51,8 +51,10 @@ You're welcome to rename the eveping.php file to anything. I have it as index.ph
   * Descriptive Label: Automatically Sends an EvE Ping from *your_channel*
   * Customize Name: EvE Ping Service
   * Customize Icon: 
+
 ![alt text](http://tinyurl.com/obrne6x "EvE Ping Logo") 
-Download and upload to Slack
+
+*Download and upload to Slack*
   * Save
   
 3. Fill out the 3 variables in the eveping php file: - *this can use different EvE Ping credentials than the slash command (optional)*
