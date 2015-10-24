@@ -17,6 +17,8 @@ You're welcome to rename the eveping.php file to anything. I have it as index.ph
 
 07 Fly Dangerous, OJ
 
+##ESPI: Slack Command
+
 1. Setup EvE Ping: https://eveping.com/
 
 2. Setup Slack (Admin): https://your_team.slack.com/services
