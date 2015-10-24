@@ -15,15 +15,7 @@ Quick side note, since I'm dealing with EvE Players. No data is collected, your 
 
 You're welcome to rename the eveping.php file to anything. I have it as index.php in a folder so that my URL's in slack are nice and clean :)
 
-07 Fly Dangerous
-
-<<<<<<< HEAD
-## EvE Ping Slack: Slash Command
-=======
-**Orange Aideron** ([John Grant](johnagrant@outlook.com))
-
-## ESPI: Slash Command
->>>>>>> c4a9e80d625c3c81252e039eb53967cff3519cc7
+07 Fly Dangerous, OJ
 
 1. Setup EvE Ping: https://eveping.com/
 
@@ -62,15 +54,9 @@ Download and upload to Slack
   * Save
   
 3. Fill out the 3 variables in the eveping php file: - *this can use different EvE Ping credentials than the slash command (optional)*
-<<<<<<< HEAD
-*  ` $evepingWebHook_SlackToken = "9n5yfLPm44e4vM5yvqcuJK5H"; ` - copy & paste from your Slack outgoing webhook token
-*  ` $evepingWebHook_KeyId = "6311939"; ` - copy & paste from your EvE Ping user account KeyId
-*  ` $evepingWebHook_Vcode = "9c3915810698c50f41dff7607aa8d795101e62aea88808a201322f132b874e67"; ` - copy & paste from your EvE Ping user account KeyId
-
-###Troubleshooting
-You can use http(s)://path/to/eveping.php?token=YOURSLACKTOKEN&debug=true for debugging EvE Ping response. Replace YOURSLACKTOKEN with an actual token configured in the eveping.php file.
-=======
   *  ` $evepingWebHook_SlackToken = "9n5yfLPm44e4vM5yvqcuJK5H"; ` - copy & paste from your Slack outgoing webhook token
   *  ` $evepingWebHook_KeyId = "6311939"; ` - copy & paste from your EvE Ping user account KeyId
   *  ` $evepingWebHook_Vcode = "9c3915810698c50f41dff7607aa8d795101e62aea88808a201322f132b874e67"; ` - copy & paste from your EvE Ping user account KeyId
->>>>>>> c4a9e80d625c3c81252e039eb53967cff3519cc7
+
+###Troubleshooting
+You can use http(s)://path/to/eveping.php?token=YOURSLACKTOKEN&debug=true for debugging EvE Ping response. Replace YOURSLACKTOKEN with an actual token configured in the eveping.php file.
