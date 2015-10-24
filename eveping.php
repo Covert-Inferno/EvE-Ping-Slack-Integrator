@@ -52,24 +52,34 @@ class EvePingSender {
     public $evepingContext = "";
     public $evepingResponse = array();
     public $ESPIreturn = "EvE Ping Error";
+    public $ESPIdebug = false;
     public function __construct() {
         $this->slackToken = urlencode($_REQUEST['token']);
         $this->slackUser = urlencode($_REQUEST['user_name']);
         $this->slackMessage = urlencode($_REQUEST['text']);
+        if ($_REQUEST['debug'] == "true"||$_REQUEST['debug']==1)
+            $this->ESPIdebug = true; 
     }
-    public function ping($id = "noid",$vcode = "novcode",$debug = false) {
+    public function ping($id = "noid",$vcode = "novcode",$returnData = false) {
         if ($this->slackMessage == urlencode("EvE Ping Sent") || $this->slackMessage == urlencode("EvE Ping Error"))
             die();
+        $this->slackMessage = str_replace("<!group>", "", $this->slackMessage);
         $this->evepingUrl .= "keyid=$id&vcode=$vcode&type=corporation&message=$this->slackUser:+$this->slackMessage";
         $this->evepingContext = stream_context_create($this->evepingOptions);
-        $this->evepingResponse[] = json_decode(file_get_contents($this->evepingUrl, false, $this->evepingContext));
+        $this->evepingResponse = file_get_contents($this->evepingUrl, false, $this->evepingContext);
+        $this->evepingResponse = get_object_vars(json_decode($this->evepingResponse));
         if (!is_array($this->evepingResponse)) 
             die("EvE Ping Error");
-        if ($this->evepingResponse['status_txt'] != "ERROR")
+        if ($this->evepingResponse['status_code'] == 200)
             $this->ESPIreturn = json_encode(array("text" => "EvE Ping Sent"));
-        if ($debug)
+        if ($returnData)
             $this->ESPIreturn = "EvE Ping Sent $this->slackUser: ".str_replace("+", " ", $this->slackMessage);
         echo $this->ESPIreturn;
+        if ($this->ESPIdebug)
+            echo "<br><b>EvE Ping Response:</b><br>"
+            . "status_code: " . $this->evepingResponse['status_code'] 
+            . " status_txt: " . $this->evepingResponse['status_txt']
+            . "<br><em>Check your EvE Ping API settings, read eveping api documentation for error details</em>";
     }
 } //EvePingSender class
 ?>
